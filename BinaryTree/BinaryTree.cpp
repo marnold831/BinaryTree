@@ -24,6 +24,7 @@ int main()
 
 	//std::cout << tree.findValue(13, resultNode) << std::endl;
 	//std::cout << (*resultNode)->value << std::endl;
+	tree.deleteValue(13);
 	tree.print();
 	std::cout << tree << std::endl;
     std::cout << "Hello World!\n";

@@ -86,20 +86,25 @@ void BTree::destroyTree() {
 	destroyTree(root);
 }
 void BTree::deleteValue(int value) {
-	deleteValue(value, findValue(value, root));
+	if (root)
+		deleteValue(value, findValue(value, root));
 }
 void BTree::deleteValue(int value, node* subNode) {
+	if (!subNode)
+		return;
 	
 	if (value == subNode->value) {
-		node* minNode = minNodeFromGivenNode(subNode->rightNode);
-		if (minNode->rightNode)
-			subNode->rightNode->leftNode = minNode->rightNode;
-		subNode->value = minNode->value;
-		delete minNode;
-	}
-	return;
-	
-
+		if (subNode->rightNode) {
+			node* minNode = minNodeFromGivenNode(subNode->rightNode);
+			if (minNode->rightNode)
+				subNode->rightNode->leftNode = minNode->rightNode;
+			subNode->value = minNode->value;
+			delete minNode;
+		}
+		
+		
+		
+	}	
 }
 node* BTree::minNodeFromGivenNode(node* subNode) {
 	if (!subNode->leftNode)
