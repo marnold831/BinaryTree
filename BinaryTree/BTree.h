@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 struct node {
 	node() : value(0), leftNode(nullptr),  rightNode(nullptr)
@@ -8,6 +9,7 @@ struct node {
 	node(int value) : value(value), leftNode(nullptr), rightNode(nullptr) {
 
 	}
+	friend std::ostream& operator<< (std::ostream& os, const node* node);
 	int value;
 	node* leftNode;
 	node* rightNode;
@@ -19,10 +21,11 @@ public :
 	~BTree();
 
 	void insertValue(int value);
-	bool findValue(int value);
+	bool findValue(int value, node** outNode);
 	void destroyTree();
-	void deleteValue();
-
+	void deleteValue(int value);
+	void print();
+	friend std::ostream& operator<< (std::ostream& os, const BTree& tree);
 private:
 	node* root;
 
@@ -31,4 +34,7 @@ private:
 	node* findValue(int value, node* subNode);
 	void deleteValue(int value, node* subNode);
 	node* minNodeFromGivenNode(node* subNode);
+	void print(node* subNode);
 };
+
+
