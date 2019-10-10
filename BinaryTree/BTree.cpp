@@ -1,19 +1,23 @@
 #include "BTree.h"
 
-
-BTree::BTree() {
+template <typename T>
+BTree<T>::BTree() {
 	root = nullptr;
 }
-BTree::~BTree() {
+
+template <typename T>
+BTree<T>::~BTree() {
 	destroyTree();
 }
-void BTree::insertValue(int value, node* subNode) {
+
+template <typename T>
+void BTree<T>::insertValue(T value, node<T>* subNode) {
 	if (subNode->value == value)
 		return;
 	bool left = value < subNode->value;
 
 	if (!subNode->leftNode && !subNode->rightNode) {
-		node* newLeaf = new node(value);
+		node<T>* newLeaf = new node<T>(value);
 		if (left)
 			subNode->leftNode = newLeaf;
 		else
@@ -23,22 +27,24 @@ void BTree::insertValue(int value, node* subNode) {
 
 	if (left) {
 		if (!subNode->leftNode) {
-			subNode->leftNode = new node(value);
+			subNode->leftNode = new node<T>(value);
 			return;
 		}
 		insertValue(value, subNode->leftNode);
 	}
 	else {
 		if (!subNode->rightNode) {
-			subNode->rightNode = new node(value);
+			subNode->rightNode = new node<T>(value);
 			return;
 		}
 		insertValue(value, subNode->rightNode);
 	}
 }
-void BTree::insertValue(int value) {
+
+template <typename T>
+void BTree<T>::insertValue(T value) {
 	if (!root) {
-		node* newLeaf = new node;
+		node<T>* newLeaf = new node<T>;
 		newLeaf->value = value;
 		root = newLeaf;
 	}
@@ -48,22 +54,24 @@ void BTree::insertValue(int value) {
 
 }
 
-node* BTree::findValue(int value, node* subNode) {
+template <typename T>
+node<T>* BTree<T>::findValue(T value, node<T>* subNode) {
 	if (value == subNode->value)
 		return subNode;
 	bool left = value < subNode->value;
 	if (left && subNode->leftNode)
 		return findValue(value, subNode->leftNode);
-	
+
 	if (!left && subNode->rightNode)
 		return findValue(value, subNode->rightNode);
 	else {
-		
+
 		return nullptr;
 	}
 }
 
-bool BTree::findValue(int value, node** outNode) {
+template <typename T>
+bool BTree<T>::findValue(T value, node<T>** outNode) {
 	if (!outNode)
 		return false;
 	if (!root)
@@ -73,23 +81,31 @@ bool BTree::findValue(int value, node** outNode) {
 		return false;
 	return true;
 }
-void BTree::destroyTree(node* subNode) {
+
+template <typename T>
+void BTree<T>::destroyTree(node<T>* subNode) {
 	if (subNode) {
 		destroyTree(subNode->leftNode);
 		destroyTree(subNode->rightNode);
 		delete subNode;
 	}
 }
-void BTree::destroyTree() {
+
+template <typename T>
+void BTree<T>::destroyTree() {
 	if (!root)
 		return;
 	destroyTree(root);
 }
-void BTree::deleteValue(int value) {
+
+template <typename T>
+void BTree<T>::deleteValue(T value) {
 	if (root)
 		deleteValue(value, root);
 }
-node* BTree::deleteValue(int value, node* subNode) {
+
+template <typename T>
+node<T>* BTree<T>::deleteValue(T value, node<T>* subNode) {
 	if (value < subNode->value)
 		subNode->leftNode = deleteValue(value, subNode->leftNode);
 	else if (value > subNode->value)
@@ -97,29 +113,33 @@ node* BTree::deleteValue(int value, node* subNode) {
 
 	if (value == subNode->value) {
 		if (!subNode->leftNode) {
-			node* temp = subNode->rightNode;
+			node<T>* temp = subNode->rightNode;
 			delete subNode;
 			return temp;
 		}
 		if (!subNode->rightNode) {
-			node* temp = subNode->leftNode;
+			node<T>* temp = subNode->leftNode;
 			delete subNode;
 			return temp;
 		}
-		node* temp = minNodeFromGivenNode(subNode->rightNode);
+		node<T>* temp = minNodeFromGivenNode(subNode->rightNode);
 		subNode->value = temp->value;
 		subNode->rightNode = deleteValue(temp->value, subNode->rightNode);
 	}
 	return subNode;
 
-	
+
 }
-node* BTree::minNodeFromGivenNode(node* subNode) {
+
+template <typename T>
+node<T>* BTree<T>::minNodeFromGivenNode(node<T>* subNode) {
 	if (!subNode->leftNode)
 		return subNode;
 	minNodeFromGivenNode(subNode->leftNode);
 }
-void BTree::print() {
+
+template <typename T>
+void BTree<T>::print() {
 	if (root) {
 		print(root);
 		std::cout << "\n" << std::endl;
@@ -127,7 +147,9 @@ void BTree::print() {
 	}
 	std::cout << "Error! No tree exists" << std::endl;
 }
-void BTree::print(node* subNode) {
+
+template <typename T>
+void BTree<T>::print(node<T>* subNode) {
 	if (subNode) {
 		print(subNode->leftNode);
 		std::cout << subNode->value << ", ";
@@ -135,11 +157,15 @@ void BTree::print(node* subNode) {
 	}
 	return;
 }
-std::ostream& operator<< (std::ostream& os, const BTree& tree) {
+
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const BTree<T>& tree) {
 	os << tree.root;
 	return os;
 }
-std::ostream& operator<< (std::ostream& os, const node* node) {
+
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const node<T>* node) {
 	if (node->leftNode)
 		os << node->leftNode;
 	os << node->value << ", ";
@@ -148,3 +174,6 @@ std::ostream& operator<< (std::ostream& os, const node* node) {
 
 	return os;
 }
+
+template std::ostream& operator<<(std::ostream& os, const BTree<int>& tree);
+template class BTree<int>;

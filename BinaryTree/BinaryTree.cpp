@@ -5,7 +5,7 @@
 
 int main()
 {
-	BTree tree;
+	BTree<int> tree;
 	tree.insertValue(10);
 	tree.insertValue(9);
 	tree.insertValue(9);
@@ -30,7 +30,7 @@ int main()
 	//std::cout << (*resultNode)->value << std::endl;
 	std::cout << tree << std::endl;
 	tree.deleteValue(7);
-	std::cout << tree << std::endl;
+	//std::cout << tree << std::endl;
     std::cout << "Hello World!\n";
 }
 
