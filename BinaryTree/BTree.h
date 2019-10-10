@@ -32,7 +32,7 @@ private:
 	void destroyTree(node* subNode);
 	void insertValue(int value, node* subNode);
 	node* findValue(int value, node* subNode);
-	void deleteValue(int value, node* subNode);
+	node* deleteValue(int value, node* subNode);
 	node* minNodeFromGivenNode(node* subNode);
 	void print(node* subNode);
 };
